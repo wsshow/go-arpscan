@@ -8,11 +8,11 @@ import (
 )
 
 var curDeviceName string
+var mu sync.RWMutex
 
 // 将抓到的数据集加入到data中，同时重置计时器
 func PushData(ip string, mac net.HardwareAddr, hostname, manuf string) {
 	global.Ticker.Stop()
-	var mu sync.RWMutex
 	mu.RLock()
 	defer func() {
 		global.Ticker.Reset()
