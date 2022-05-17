@@ -32,12 +32,12 @@ func ReverseString(s string) (result string) {
 	return
 }
 
-func ConvertGBK2StrFromBytes(gbkBytes []byte) string {
-	b, err := simplifiedchinese.GBK.NewDecoder().Bytes(gbkBytes)
+func ConvertGBK2StrFromStr(gbkStr string) string {
+	b, err := simplifiedchinese.GBK.NewDecoder().String(gbkStr)
 	if err != nil {
-		log.Println("ConvertGBK2StrFromBytes error:", err)
+		log.Println(err)
 	}
-	return string(b)
+	return b
 }
 
 func preNUm(data byte) int {
