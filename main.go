@@ -40,6 +40,7 @@ func PrintData(data map[string]storage.BaseInfo) {
 		}
 		log.Printf("%-15s %-17s %-30s %-10s\n", k.String(), mac, d.Hostname, d.Manuf)
 	}
+	log.Println("Total Count:", len(keys))
 }
 
 func main() {
