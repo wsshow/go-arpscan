@@ -12,10 +12,11 @@ import (
 	"strings"
 	"sync"
 
+	manuf "goscan/manuf"
+
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
 	"github.com/google/gopacket/pcap"
-	manuf "github.com/timest/gomanuf"
 )
 
 func ScanARP(ctx context.Context) {
