@@ -24,7 +24,6 @@ func NewBuffer() *Buffer {
 	return &Buffer{}
 }
 
-// 反转字符串
 func ReverseString(s string) (result string) {
 	for _, v := range s {
 		result = string(v) + result
@@ -40,28 +39,28 @@ func ConvertGBK2StrFromStr(gbkStr string) string {
 	return b
 }
 
-func preNUm(data byte) int {
-	var mask byte = 0x80
-	var num int = 0
-	//8bit中首个0bit前有多少个1bits
-	for i := 0; i < 8; i++ {
-		if (data & mask) == mask {
-			num++
-			mask = mask >> 1
-		} else {
-			break
-		}
-	}
-	return num
-}
 func IsUtf8(data []byte) bool {
+	fPreNum := func(data byte) int {
+		var mask byte = 0x80
+		var num int = 0
+		//8bit中首个0bit前有多少个1bits
+		for i := 0; i < 8; i++ {
+			if (data & mask) == mask {
+				num++
+				mask = mask >> 1
+			} else {
+				break
+			}
+		}
+		return num
+	}
 	i := 0
 	for i < len(data) {
 		if (data[i] & 0x80) == 0x00 {
 			// 0XXX_XXXX
 			i++
 			continue
-		} else if num := preNUm(data[i]); num > 2 {
+		} else if num := fPreNum(data[i]); num > 2 {
 			// 110X_XXXX 10XX_XXXX
 			// 1110_XXXX 10XX_XXXX 10XX_XXXX
 			// 1111_0XXX 10XX_XXXX 10XX_XXXX 10XX_XXXX
