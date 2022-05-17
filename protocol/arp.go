@@ -6,13 +6,13 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
-	"goscan/utils"
+	"go-arpscan/utils"
 	"log"
 	"net"
 	"strings"
 	"sync"
 
-	manuf "goscan/manuf"
+	manuf "go-arpscan/manuf"
 
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"

@@ -1,8 +1,8 @@
 package protocol
 
 import (
-	"goscan/global"
-	"goscan/storage"
+	"go-arpscan/global"
+	"go-arpscan/storage"
 	"net"
 	"sync"
 )

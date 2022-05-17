@@ -1,4 +1,4 @@
-module goscan
+module go-arpscan
 
 go 1.17
 
