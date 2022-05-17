@@ -2,10 +2,10 @@ package main
 
 import (
 	"context"
-	"goscan/global"
-	"goscan/protocol"
-	"goscan/storage"
-	"goscan/utils"
+	"go-arpscan/global"
+	"go-arpscan/protocol"
+	"go-arpscan/storage"
+	"go-arpscan/utils"
 	"log"
 	"os"
 	"runtime"
