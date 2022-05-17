@@ -35,6 +35,9 @@ func PrintData(data map[string]storage.BaseInfo) {
 		if d.Mac != nil {
 			mac = d.Mac.String()
 		}
+		if !utils.IsUtf8([]byte(d.Hostname)) {
+			d.Hostname = utils.ConvertGBK2StrFromStr(d.Hostname)
+		}
 		log.Printf("%-15s %-17s %-30s %-10s\n", k.String(), mac, d.Hostname, d.Manuf)
 	}
 }
