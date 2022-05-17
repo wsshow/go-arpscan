@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/binary"
-	"goscan/utils"
+	"go-arpscan/utils"
 	"log"
 	"net"
 	"strings"

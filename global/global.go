@@ -1,5 +1,5 @@
 package global
 
-import "goscan/utils"
+import "go-arpscan/utils"
 
 var Ticker *utils.Ticker
