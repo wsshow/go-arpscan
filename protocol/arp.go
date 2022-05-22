@@ -20,13 +20,13 @@ import (
 )
 
 func ScanARP(ctx context.Context) {
-	// Get a list of all interfaces.
+	// 获取系统所有网络接口的切片
 	ifaces, err := net.Interfaces()
 	if err != nil {
 		panic(err)
 	}
 
-	// Get a list of all devices
+	// 获取所有设备接口的切片
 	devices, err := pcap.FindAllDevs()
 	if err != nil {
 		panic(err)
@@ -35,7 +35,7 @@ func ScanARP(ctx context.Context) {
 	var wg sync.WaitGroup
 	for _, iface := range ifaces {
 		wg.Add(1)
-		// Start up a scan on each interface.
+		// 对获取到的所有接口进行arp扫描
 		go func(iface net.Interface) {
 			defer wg.Done()
 			if err := scan(&iface, &devices, ctx); err != nil {
@@ -74,7 +74,7 @@ func scan(iface *net.Interface, devices *[]pcap.Interface, ctx context.Context) 
 	}
 	log.Printf("Using network range %v for interface %v", addr, iface.Name)
 
-	// Try to find a match between device and interface
+	// 主要解决windows中设备名称与接口名称不对应的问题
 	var deviceName string
 	for _, d := range *devices {
 		if strings.Contains(fmt.Sprint(d.Addresses), fmt.Sprint(addr.IP)) {
@@ -110,6 +110,7 @@ func scan(iface *net.Interface, devices *[]pcap.Interface, ctx context.Context) 
 	return nil
 }
 
+// 读取返回的arp数据包
 func readARP(addr *net.IPNet, handle *pcap.Handle, iface *net.Interface, ctx context.Context) {
 	src := gopacket.NewPacketSource(handle, layers.LayerTypeEthernet)
 	in := src.Packets()
@@ -124,13 +125,16 @@ func readARP(addr *net.IPNet, handle *pcap.Handle, iface *net.Interface, ctx con
 				continue
 			}
 			arp := arpLayer.(*layers.ARP)
+			// 过滤自己发送的数据包
 			if arp.Operation != layers.ARPReply || bytes.Equal([]byte(iface.HardwareAddr), arp.SourceHwAddress) {
-				// This is a packet I sent.
 				continue
 			}
+			// 从收到的arp数据包中提取物理地址
 			mac := net.HardwareAddr(arp.SourceHwAddress)
+			// 获取网卡供应商信息
 			m := manuf.Search(mac.String())
 			PushData(utils.ParseIP(arp.SourceProtAddress).String(), mac, "", m)
+			// 发送对应数据包以获取主机名
 			if strings.Contains(m, "Apple") {
 				go sendMdns(addr, iface.HardwareAddr, utils.ParseIP(arp.SourceProtAddress), mac)
 			} else {
@@ -140,6 +144,7 @@ func readARP(addr *net.IPNet, handle *pcap.Handle, iface *net.Interface, ctx con
 	}
 }
 
+// 准备arp数据包
 func writeARP(handle *pcap.Handle, iface *net.Interface, addr *net.IPNet) error {
 	// Set up all the layers' fields we can.
 	eth := layers.Ethernet{
